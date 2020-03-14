@@ -1,6 +1,6 @@
 const main = document.getElementById('main');
 const addUserBtn = document.getElementById('add-user');
-const doublesBtn = document.getElementById('double');
+const doubleBtn = document.getElementById('double');
 const showMillionairesBtn = document.getElementById('show-millionaires');
 const sortBtn = document.getElementById('sort');
 const calculateWealthBtn = document.getElementById('calculate-wealth');
@@ -14,7 +14,7 @@ getRandomUser();
 //fetch random user and add money
 async function getRandomUser() {
 	const res = await fetch('https://randomuser.me/api');
-	const data = await res.json;
+	const data = await res.json();
 
 	const user = data.results[0];
 
@@ -49,6 +49,15 @@ function showMillionaires() {
 	updateDOM();
 }
 
+//calculate the total wealth
+function calculateWealth() {
+	const wealth = data.reduce((acc, user) => (acc += user.money), 0);
+
+	const wealthEl = document.createElement('div');
+	wealthEl.innerHTML = `<h3>Total Wealth: <strong>${formatMoney(wealth)}</strong><h3>`;
+	main.appendChild(wealthEl);
+}
+
 //add new obj to data arr
 function addData(obj) {
 	data.push(obj);
@@ -63,7 +72,7 @@ function updateDOM(providedData = data) {
 	providedData.forEach((item) => {
 		const element = document.createElement('div');
 		element.classList.add('person');
-		element.innerHTML = `<strong>${item.name}</strong> ${item.money}`;
+		element.innerHTML = `<strong>${item.name}</strong> ${formatMoney(item.money)}`;
 		main.appendChild(element);
 	});
 }
@@ -78,3 +87,4 @@ addUserBtn.addEventListener('click', getRandomUser);
 doubleBtn.addEventListener('click', doubleMoney);
 sortBtn.addEventListener('click', sortByRichest);
 showMillionairesBtn.addEventListener('click', showMillionaires);
+calculateWealthBtn.addEventListener('click', showMillionaires);
